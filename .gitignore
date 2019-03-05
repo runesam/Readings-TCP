@@ -53,9 +53,9 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
-
+freshEnergyCodeChallange.iml
 # dotenv environment variables file
 .env
-
+.idea/
 # next.js build output
 .next
