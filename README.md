@@ -26,6 +26,9 @@ Note: the ports betwean 9000..(9000 + number_of_meters) will be used for receivi
 
 
 ### to run the app
+   * make sure both `nodemon` and `yarn` are installed globally.
+        `brew install yarn`
+        `npm install -g nodemon`
    * install application dependencies via `yarn`.
    * app is relying on the following ports `3000` , `5000` and the ports mentioned in the TCP server read me. so all should be free.
    * run the app via `yarn app`. This command will initiate TCP reading server, the app server and the app client `front end`.
