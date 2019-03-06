@@ -17,10 +17,14 @@ const onMessageReceivedHandler = (message) => {
 class ReadingsServerConnection {
     constructor(port) {
         this.port = port;
-        this.client = new net.Socket({ readable: true });
+        this.client = new net.Socket({ readable: true, writable: true });
         this.client.on('data', onMessageReceivedHandler);
-        this.client.on('close', () => { console.log(`Connection closed ${this.port}`); });
+        this.client.on('close', this.onCloseHandler.bind(this));
         this.client.on('error', this.onErrorHandler.bind(this));
+    }
+
+    onCloseHandler() {
+        console.log(`Connection closed ${this.port}`);
     }
 
     onErrorHandler(error) {

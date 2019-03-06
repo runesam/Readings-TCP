@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const setParamsObjectToURL = (paramsObj) => {
     const params = new URLSearchParams();
     Object.keys(paramsObj).forEach(key => params.append(key, paramsObj[key]));
@@ -27,4 +29,14 @@ export const getErrors = (reason) => {
             }
     }
     return errors;
+};
+
+export const extractDataFromReadings = (readings, activeMeter) => {
+    if (Object.keys(readings).length) {
+        return readings[activeMeter].map(reading => ({
+            date: moment(reading.timestamp).format('HH:mm'),
+            power: reading.data.power,
+        }));
+    }
+    return [];
 };

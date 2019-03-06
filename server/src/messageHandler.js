@@ -1,15 +1,16 @@
 const readings = {};
 
 const handleControlMessage = ({ meterId, port }) => {
-    console.log('control', meterId, port);
     const ConnectToReadingsServer = require('./readingsServer');
     const connection = new ConnectToReadingsServer(port);
     connection.connectToReadingsServer();
+
     const sum = readings[meterId].reduce((acc, reading) => {
         let currentSum = acc;
         currentSum += reading.data.energy;
         return currentSum;
     }, 0);
+
     const data = {
         type: 'SUM_CONTROL',
         payload: {
@@ -17,12 +18,8 @@ const handleControlMessage = ({ meterId, port }) => {
             sum,
         },
     };
-    // const buffer = Buffer.from(JSON.stringify(data));
-    setTimeout(() => {
-        connection.client.write('@!>\n');
-        const state = connection.client.write(JSON.stringify(data));
-        console.log(JSON.stringify(data), state);
-    }, 1000);
+
+    connection.client.write(`${JSON.stringify(data)}\n`);
 };
 
 const handleReadingMessage = ({ meterId, timestamp, data }) => {
@@ -31,7 +28,9 @@ const handleReadingMessage = ({ meterId, timestamp, data }) => {
     } else {
         readings[meterId] = [{ timestamp, data }];
     }
-    console.log(meterId, data.energy);
+
+    const io = require('./io.socket');
+    io.emit('readings', readings);
 };
 
 const handleSumResultMessage = message => console.log(message);
